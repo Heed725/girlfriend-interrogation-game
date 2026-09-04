@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Important Questions</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at top, #ff8fb1, #ff4f83 40%, #2b0a1a);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: min(650px, 100%);
+      min-height: 570px;
+      background: rgba(25, 5, 18, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 28px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
+      backdrop-filter: blur(14px);
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 16px;
+    }
+
+    .question-number {
+      font-size: 13px;
+      opacity: 0.75;
+    }
+
+    .stage {
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 999px;
+    }
+
+    .progress-wrapper {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 36px;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff92b5, #ff3c78);
+      transition: width 0.35s ease;
+    }
+
+    .emoji {
+      text-align: center;
+      font-size: 62px;
+      margin-bottom: 18px;
+      animation: bounce 1.6s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 auto;
+      max-width: 560px;
+      font-size: clamp(25px, 5vw, 38px);
+      line-height: 1.25;
+    }
+
+    .subtitle {
+      min-height: 28px;
+      margin-top: 20px;
+      text-align: center;
+      color: #ffc6d8;
+      font-weight: 700;
+    }
+
+    .arena {
+      position: relative;
+      height: 190px;
+      margin-top: 25px;
+      border-radius: 22px;
+      border: 1px dashed rgba(255, 255, 255, 0.13);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    button {
+      border: none;
+      min-width: 115px;
+      min-height: 52px;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    #yesBtn {
+      position: absolute;
+      left: 17%;
+      top: 70px;
+      color: white;
+      background: linear-gradient(135deg, #ff417d, #ff729f);
+      box-shadow: 0 10px 28px rgba(255, 65, 125, 0.35);
+      transition: transform 0.2s;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.08);
+    }
+
+    #noBtn {
+      position: absolute;
+      left: 62%;
+      top: 70px;
+      color: #33101c;
+      background: white;
+      transition:
+        left 0.12s ease,
+        top 0.12s ease,
+        transform 0.15s;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.45;
+      margin-top: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .intro {
+      text-align: center;
+      padding-top: 35px;
+    }
+
+    .intro h1 {
+      font-size: clamp(30px, 6vw, 47px);
+    }
+
+    .intro p {
+      line-height: 1.7;
+      font-size: 17px;
+      color: #ffd3e0;
+      max-width: 480px;
+      margin: 20px auto 35px;
+    }
+
+    .start-btn {
+      color: white;
+      background: linear-gradient(135deg, #ff417d, #ff729f);
+      padding: 17px 35px;
+    }
+
+    .final {
+      text-align: center;
+      padding: 25px 5px;
+    }
+
+    .final .big {
+      font-size: 70px;
+    }
+
+    .final h2 {
+      font-size: clamp(30px, 6vw, 48px);
+      margin-bottom: 15px;
+    }
+
+    .confession {
+      max-width: 500px;
+      margin: 25px auto;
+      padding: 22px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      line-height: 1.8;
+      font-size: 17px;
+    }
+
+    .restart {
+      margin-top: 10px;
+      background: white;
+      color: #52172c;
+    }
+
+    .heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      animation: heartFly 2.4s forwards ease-out;
+    }
+
+    @keyframes heartFly {
+      0% {
+        transform: translateY(20px) scale(0.4) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-420px) scale(1.6) rotate(40deg);
+        opacity: 0;
+      }
+    }
+
+    .confetti {
+      position: fixed;
+      top: -20px;
+      width: 10px;
+      height: 16px;
+      z-index: 999;
+      pointer-events: none;
+      animation: fall 3.5s linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(900deg);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .card {
+        min-height: 600px;
+        padding: 22px 16px;
+      }
+
+      .arena {
+        height: 210px;
+      }
+
+      #yesBtn {
+        left: 8%;
+      }
+
+      #noBtn {
+        left: 57%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="card">
+      <section id="intro" class="intro">
+        <div style="font-size:80px">😌❤️</div>
+        <h1>I made you something ❤️</h1>
+        <p>
+          I have a few extremely important relationship questions.
+          <br><br>
+          Please answer honestly. 👀
+          <br><br>
+          This test is completely fair and definitely not rigged. 😂
+        </p>
+        <button id="startBtn" class="start-btn">OPEN IT ❤️</button>
+      </section>
+
+      <section id="game" class="hidden">
+        <div class="top">
+          <div id="counter" class="question-number">Question 1 / 25</div>
+          <div id="stage" class="stage">❤️ Cute</div>
+        </div>
+        <div class="progress-wrapper">
+          <div id="progress" class="progress"></div>
+        </div>
+        <div id="emoji" class="emoji">🥹</div>
+        <h1 id="question"></h1>
+        <div id="reaction" class="subtitle" aria-live="polite">Choose wisely 😌</div>
+        <div id="arena" class="arena">
+          <button id="yesBtn">YES ❤️</button>
+          <button id="noBtn">NO 😭</button>
+        </div>
+        <div class="footer-note">Relationship Interrogation System™</div>
+      </section>
+
+      <section id="final" class="final hidden">
+        <div class="big">🚨💖🚨</div>
+        <h2>CONFESSION COMPLETE</h2>
+        <div class="confession">
+          You have officially admitted that:
+          <br><br>
+          ❤️ You love me.
+          <br>
+          👀 You find me attractive.
+          <br>
+          😏 You have suspicious thoughts about me.
+          <br>
+          😈 We probably cannot be trusted alone together.
+          <br>
+          😂 And you repeatedly attempted to lie by pressing NO.
+          <br><br>
+          <strong>Unfortunately, there is no appeal process.</strong>
+        </div>
+        <h3>Evidence permanently stored in my heart. 😂❤️</h3>
+        <button id="restartBtn" class="restart">DO IT AGAIN 😂</button>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { text: "Do you love me? 🥹❤️", stage: "❤️ Cute", emoji: "🥹" },
+      { text: "Do you secretly miss me when we're apart? 👀", stage: "❤️ Cute", emoji: "🥺" },
+      { text: "Would you choose me again if we met for the first time today? ❤️", stage: "❤️ Cute", emoji: "😍" },
+      { text: "Do you like it when I randomly hug you? 🥹", stage: "❤️ Cute", emoji: "🤗" },
+      { text: "Are you secretly a little obsessed with me? 😂", stage: "❤️ Cute", emoji: "😭" },
+      { text: "Have you ever looked at my lips while I was talking? 👀", stage: "😏 Flirty", emoji: "👀" },
+      { text: "Would you kiss me right now if I was standing next to you? 😏", stage: "😏 Flirty", emoji: "😘" },
+      { text: "Do I ever make you nervous in a good way? 😌", stage: "😏 Flirty", emoji: "😳" },
+      { text: "Would you kiss me in the middle of an argument? 😂", stage: "😏 Flirty", emoji: "😤" },
+      { text: "Have you ever intentionally worn something because you knew I'd notice? 👀", stage: "😏 Flirty", emoji: "😏" },
+      { text: "Would you let me kiss your neck until you forgot what you were saying? 😭", stage: "😏 Flirty", emoji: "🫣" },
+      { text: "Have you ever wanted to drag me somewhere private? 👀", stage: "😏 Flirty", emoji: "😈" },
+      { text: "Have you ever gotten turned on just from looking at me? 👀", stage: "😈 Dirty", emoji: "😏" },
+      { text: "Have you ever imagined us doing something very naughty together? 😈", stage: "😈 Dirty", emoji: "🫣" },
+      { text: "Have you ever had a dirty dream about me? 😂", stage: "😈 Dirty", emoji: "😴" },
+      { text: "Would you let me whisper something filthy in your ear while we're in public? 👀", stage: "😈 Dirty", emoji: "😈" },
+      { text: "Have you ever wanted me while we were around other people? 😭", stage: "😈 Dirty", emoji: "👀" },
+      { text: "Would you let me blindfold you and surprise you? 😏", stage: "😈 Dirty", emoji: "🙈" },
+      { text: "Would you let me take control for one night? 👀", stage: "😈 Dirty", emoji: "😈" },
+      { text: "Would you let me tease you and make you wait for what you want? 😂", stage: "😈 Dirty", emoji: "😏" },
+      { text: "Have you ever thought about me while trying to sleep and made yourself blush? 😭", stage: "😈 Dirty", emoji: "🫣" },
+      { text: "Would you tell me your wildest fantasy if I promised not to laugh? 👀", stage: "😈 Dirty", emoji: "🤐" },
+      { text: "Would you let me make you admit exactly what turns you on? 😏", stage: "😈 Dirty", emoji: "😈" },
+      { text: "Are you sure you want to continue? The questions are about to get VERY personal 😭", stage: "🚨 Warning", emoji: "⚠️" },
+      { text: "Would you ever want to try anal sex together? 👀", stage: "😈 Intimate", emoji: "🫣" },
+      { text: "Would you ever want to try oral with me? 😏", stage: "😈 Intimate", emoji: "👀" },
+      { text: "Would you ever want us to use toys together? 😈", stage: "😈 Intimate", emoji: "🫣" },
+      { text: "Would you let me take control in bed one night? 😏", stage: "😈 Intimate", emoji: "😈" },
+      { text: "Would you ever want to be the one completely in control? 👀", stage: "😈 Intimate", emoji: "😏" },
+      { text: "Would you ever want to try roleplay with me? 😂👀", stage: "😈 Intimate", emoji: "🎭" },
+      { text: "Would you ever let me blindfold you during an intimate night? 😈", stage: "😈 Intimate", emoji: "🙈" },
+      { text: "Would you be willing to tell me your biggest sexual fantasy? 👀", stage: "😈 Intimate", emoji: "🤐" },
+      { text: "Is there something sexual you've wanted us to try but haven't told me yet? 😭", stage: "😈 Intimate", emoji: "👀" },
+      { text: "Would you ever want us to spend a whole night exploring each other's fantasies? 😏", stage: "😈 Intimate", emoji: "😈" },
+      { text: "Would you behave if we were completely alone tonight? 😈", stage: "☠️ Final Boss", emoji: "😂" },
+      { text: "Have you ever been seriously turned on by me when we were somewhere public? 😂", stage: "☠️ Final Boss", emoji: "🚨" },
+      { text: "If we had a hotel room completely to ourselves tonight, would you behave? 😈", stage: "☠️ Final Boss", emoji: "🏨" },
+      { text: "Would you trust me enough to tell me exactly what you like in bed? 👀", stage: "☠️ Final Boss", emoji: "😏" },
+      { text: "Would you actually be willing to try one of your fantasies with me someday? 😈", stage: "☠️ Final Boss", emoji: "🫣" },
+      { text: "Would you still press YES if I told you I'm keeping these answers as evidence? 😭❤️", stage: "☠️ Final Boss", emoji: "🚨" }
+    ];
+
+    const noMessages = [
+      "Nice try 😂",
+      "ABSOLUTELY NOT 😭",
+      "That answer has been rejected 🚨",
+      "Be serious 😏",
+      "LIAR 😂",
+      "The universe says YES ❤️",
+      "No is currently unavailable 😭",
+      "Why are you chasing it?? 😂",
+      "Caught you trying to lie 👀",
+      "Please stop embarrassing yourself 😭",
+      "Incorrect answer detected 🚨",
+      "Try again babe 😂",
+      "That button clearly doesn't like you 😭",
+      "System error: NO not permitted 😌",
+      "Just press YES already 😂❤️"
+    ];
+
+    const intro = document.getElementById("intro");
+    const game = document.getElementById("game");
+    const finalScreen = document.getElementById("final");
+    const startBtn = document.getElementById("startBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const questionElement = document.getElementById("question");
+    const counter = document.getElementById("counter");
+    const stageElement = document.getElementById("stage");
+    const emojiElement = document.getElementById("emoji");
+    const progress = document.getElementById("progress");
+    const reaction = document.getElementById("reaction");
+    const arena = document.getElementById("arena");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    let currentQuestion = 0;
+    let noAttempts = 0;
+
+    function showQuestion() {
+      const item = questions[currentQuestion];
+
+      questionElement.textContent = item.text;
+      stageElement.textContent = item.stage;
+      emojiElement.textContent = item.emoji;
+      counter.textContent = `Question ${currentQuestion + 1} / ${questions.length}`;
+      progress.style.width = `${(currentQuestion / questions.length) * 100}%`;
+      reaction.textContent = "Choose wisely 😌";
+
+      resetButtons();
+    }
+
+    function resetButtons() {
+      noBtn.style.left = "62%";
+      noBtn.style.top = "70px";
+      noBtn.style.transform = "scale(1)";
+      noBtn.textContent = "NO 😭";
+      yesBtn.style.left = "17%";
+    }
+
+    function moveNoButton() {
+      noAttempts++;
+
+      const arenaRect = arena.getBoundingClientRect();
+      const buttonRect = noBtn.getBoundingClientRect();
+      const maxX = arenaRect.width - buttonRect.width - 10;
+      const maxY = arenaRect.height - buttonRect.height - 10;
+      const randomX = Math.max(5, Math.random() * maxX);
+      const randomY = Math.max(5, Math.random() * maxY);
+
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+      reaction.textContent = noMessages[Math.floor(Math.random() * noMessages.length)];
+
+      if (noAttempts > 4) {
+        noBtn.textContent = "STILL NO? 😭";
+      }
+
+      if (noAttempts > 8) {
+        noBtn.textContent = "MAYBE? 😂";
+        noBtn.style.transform = "scale(.85)";
+      }
+
+      if (noAttempts > 12) {
+        noBtn.textContent = "YES 😭";
+      }
+    }
+
+    function yesAnswer() {
+      createHearts();
+      currentQuestion++;
+      noAttempts = 0;
+
+      if (currentQuestion >= questions.length) {
+        finishGame();
+        return;
+      }
+
+      showQuestion();
+    }
+
+    function finishGame() {
+      progress.style.width = "100%";
+      game.classList.add("hidden");
+      finalScreen.classList.remove("hidden");
+      createConfetti();
+      createHeartStorm();
+    }
+
+    function createHearts() {
+      for (let i = 0; i < 8; i++) {
+        const heart = document.createElement("div");
+
+        heart.className = "heart";
+        heart.textContent = ["❤️", "💕", "💗", "💖"][Math.floor(Math.random() * 4)];
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = window.innerHeight - 20 + "px";
+        heart.style.fontSize = 20 + Math.random() * 25 + "px";
+
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 2500);
+      }
+    }
+
+    function createHeartStorm() {
+      let count = 0;
+
+      const timer = setInterval(() => {
+        createHearts();
+        count++;
+
+        if (count > 10) {
+          clearInterval(timer);
+        }
+      }, 300);
+    }
+
+    function createConfetti() {
+      const colors = ["#ff3e79", "#ffffff", "#ff9bbb", "#ffd54a", "#9d79ff"];
+
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement("div");
+
+        confetti.className = "confetti";
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 2 + "s";
+
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 6000);
+      }
+    }
+
+    startBtn.addEventListener("click", () => {
+      intro.classList.add("hidden");
+      game.classList.remove("hidden");
+      currentQuestion = 0;
+      noAttempts = 0;
+      showQuestion();
+    });
+
+    yesBtn.addEventListener("click", yesAnswer);
+    noBtn.addEventListener("mouseenter", moveNoButton);
+
+    noBtn.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      moveNoButton();
+    });
+
+    noBtn.addEventListener("focus", moveNoButton);
+
+    restartBtn.addEventListener("click", () => {
+      finalScreen.classList.add("hidden");
+      intro.classList.remove("hidden");
+      currentQuestion = 0;
+      noAttempts = 0;
+    });
+  </script>
+</body>
+</html>
